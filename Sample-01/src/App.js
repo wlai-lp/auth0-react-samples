@@ -19,7 +19,23 @@ import initFontAwesome from "./utils/initFontAwesome";
 initFontAwesome();
 
 const App = () => {
-  const { isLoading, error } = useAuth0();
+  const { isLoading, error, getIdTokenClaims, isAuthenticated } = useAuth0();
+
+  // Wei - get JWT
+  const getIdToken = async () => {
+    if (isAuthenticated) {
+      try {
+        const idTokenClaims = await getIdTokenClaims();
+        const idToken = idTokenClaims.__raw; // The raw JWT token
+        console.log('ID Token:', idToken);
+      } catch (error) {
+        console.error('Error getting ID token claims:', error);
+      }
+    }
+  };
+
+  getIdToken();
+  // end
 
   if (error) {
     return <div>Oops... {error.message}</div>;
